@@ -17,3 +17,15 @@
 23:01:52.425 [main] INFO  com.revature.Mapper - Initializing Mapper
 23:05:30.827 [main] INFO  com.revature.Mapper - Initializing Mapper
 23:06:05.397 [main] INFO  com.revature.Mapper - Initializing Mapper
+10:20:52.667 [main] INFO  com.revature.Mapper - Initializing Mapper
+10:21:40.804 [main] INFO  com.revature.Mapper - Initializing Mapper
+10:27:54.489 [main] INFO  com.revature.Mapper - Initializing Mapper
+10:28:30.900 [main] INFO  com.revature.Mapper - Initializing Mapper
+10:42:35.825 [main] INFO  com.revature.Mapper - Initializing Mapper
+10:43:23.912 [main] INFO  com.revature.Mapper - Initializing Mapper
+10:44:48.651 [main] INFO  com.revature.Mapper - Initializing Mapper
+10:45:14.915 [main] INFO  com.revature.Mapper - Initializing Mapper
+11:13:33.637 [main] INFO  com.revature.Mapper - Initializing Mapper
+11:15:17.150 [main] INFO  com.revature.Mapper - Initializing Mapper
+11:15:38.444 [main] INFO  com.revature.Mapper - Initializing Mapper
+11:16:40.979 [main] INFO  com.revature.Mapper - Initializing Mapper
