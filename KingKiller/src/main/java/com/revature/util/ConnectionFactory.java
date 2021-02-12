@@ -1,5 +1,8 @@
 package com.revature.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
@@ -8,6 +11,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionFactory {
+    private final Logger logger = LogManager.getLogger(Session.class);
 
     private static ConnectionFactory connFactory = new ConnectionFactory();
 
@@ -21,6 +25,7 @@ public class ConnectionFactory {
         }
     }
 
+    //STARTS a connection to the database
     private ConnectionFactory() {
         try {
             props.load(new FileReader("src/main/resources/application.properties"));
@@ -29,6 +34,10 @@ public class ConnectionFactory {
         }
     }
 
+    /**
+     * Gets an instance of the connFactory static ConnectionFactory object
+     * @return
+     */
     public static ConnectionFactory getInstance() {
         return connFactory;
     }
@@ -36,9 +45,7 @@ public class ConnectionFactory {
     public Connection getConnection() {
 
         Connection conn = null;
-
         try {
-
             conn = DriverManager.getConnection(
                     props.getProperty("url"),
                     props.getProperty("admin-usr"),
@@ -46,11 +53,20 @@ public class ConnectionFactory {
             );
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.debug("Failed getting connection -");
+            logger.debug("Debug info: " + e.getMessage());
         }
-
         return conn;
+    }
 
+    public boolean testConnection() {
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            logger.info("Test Connection Successful - Connection Schema: " + conn.getSchema());
+            return true;
+        } catch (SQLException e) {
+            logger.debug(e.getMessage());
+            return false;
+        }
     }
 
 }

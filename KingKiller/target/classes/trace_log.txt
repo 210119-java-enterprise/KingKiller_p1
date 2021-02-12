@@ -16,4 +16,3 @@
 23:00:53.198 [main] INFO  com.revature.Mapper - Initializing Mapper
 23:01:52.425 [main] INFO  com.revature.Mapper - Initializing Mapper
 23:05:30.827 [main] INFO  com.revature.Mapper - Initializing Mapper
-23:06:05.397 [main] INFO  com.revature.Mapper - Initializing Mapper

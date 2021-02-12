@@ -1,8 +1,6 @@
 22:04:46.012 [main] INFO  com.revature.Mapper - Initializing Mapper
 21:49:16.045 [main] INFO  com.revature.Mapper - Initializing Mapper
 22:15:50.288 [main] INFO  com.revature.Mapper - Initializing Mapper
-22:15:51.843 [main] DEBUG com.revature.Mapper - error getting obj valuesnull
-22:15:51.844 [main] DEBUG com.revature.Mapper - error getting obj valuesnull
 22:16:36.129 [main] INFO  com.revature.Mapper - Initializing Mapper
 22:27:57.103 [main] INFO  com.revature.Mapper - Initializing Mapper
 22:28:35.064 [main] INFO  com.revature.Mapper - Initializing Mapper
@@ -16,4 +14,3 @@
 23:00:53.198 [main] INFO  com.revature.Mapper - Initializing Mapper
 23:01:52.425 [main] INFO  com.revature.Mapper - Initializing Mapper
 23:05:30.827 [main] INFO  com.revature.Mapper - Initializing Mapper
-23:06:05.397 [main] INFO  com.revature.Mapper - Initializing Mapper
