@@ -1,0 +1,7 @@
+<configuration>
+    <dbConfig>
+        <url>jdbc:postgresql://revaturedb.cqu0vx8vy1y0.us-east-2.rds.amazonaws.com:5432/mydb</url>
+        <username>enewman10</username>
+        <password>Packers1!</password>
+    </dbConfig>
+</configuration>

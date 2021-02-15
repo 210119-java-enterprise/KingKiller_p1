@@ -1,4 +1,4 @@
-package com.revature.util;
+package com.revature.scapers;
 
 import java.lang.reflect.*;
 import java.util.ArrayList;

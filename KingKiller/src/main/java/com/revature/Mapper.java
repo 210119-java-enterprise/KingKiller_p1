@@ -1,49 +1,43 @@
 package com.revature;
 
 
-import com.revature.mapping.ObjectMapper;
-import com.revature.models.Employee;
-import com.revature.util.ClassInspector;
-import com.revature.util.ConnectionFactory;
-import com.revature.util.Session;
+import com.revature.scapers.ClassInspector;
+import com.revature.scapers.ConfigScraper;
+import com.revature.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.tools.picocli.CommandLine;
 
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
+//Kind of like the session object for the KingKiller app
+//has db connection and lets user do mappings to from db
 public class Mapper {
 
     private static final Logger logger = LogManager.getLogger(Mapper.class);
-    private Session session;
-    public Mapper() {
-        logger.info("Initializing Mapper");
+    private static ConnectionFactory connectionPool;
+    private List<Metamodel<Class<?>>> modelList;
 
-        this.session = new Session();
-        //get database connection
-        //get valid class names
-        //map user object to db if matching class name
+    public Mapper(String configPath) {
+        ConfigData appConfig = new ConfigScraper().ScrapeConfig(configPath); //get db connection info
+        connectionPool = new ConnectionFactory(appConfig); //connections avaliable
+        modelList = new LinkedList<>();
     }
 
-    public boolean Map(Class<?> clazz) {
-        ClassInspector.inspectClass(clazz);
+    public boolean Map(Class clazz) {
+        modelList.add(Metamodel.of(clazz));
         return true;
     }
 
-    public Session getSession() {
-        return this.session;
+    public SessionManager getSessionManager() {
+        return new SessionManager(modelList, connectionPool);
     }
 
-    public boolean map(Object o) {
-        ClassInspector.inspectClass(o.getClass());
-        ObjectMapper objMapper = new ObjectMapper(o);
-        objMapper.mapObj();
-        return true;
-    }
+//    public boolean map(Object o) {
+//        ClassInspector.inspectClass(o.getClass());
+//        ObjectMapper objMapper = new ObjectMapper(o);
+//        objMapper.mapObj();
+//        return true;
+//    }
 
 }

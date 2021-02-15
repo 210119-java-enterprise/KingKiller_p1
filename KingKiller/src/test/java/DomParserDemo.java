@@ -1,5 +1,3 @@
-package com.revature.xmlTests;
-
 import java.io.File;
 import java.net.URL;
 import javax.xml.parsers.DocumentBuilderFactory;
