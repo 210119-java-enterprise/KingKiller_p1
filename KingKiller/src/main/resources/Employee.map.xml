@@ -1,19 +1,28 @@
 <?xml version = "1.0" encoding = "utf-8"?>
 
 <map>
-    <class name = "Employee" table = "EMPLOYEE">
+    <class>
+        <name>Employee</name>
+        <column>
+            <objfieldname>id</objfieldname>
+            <colname>id</colname>
+            <type>int</type>
+        </column>
 
-        <meta attribute = "class-description">
-            This class contains the employee detail.
-        </meta>
-
-        <id name = "id" type = "int" column = "id">
-            <generator class="native"/>
-        </id>
-
-        <property name = "firstName" column = "first_name" type = "string"/>
-        <property name = "lastName" column = "last_name" type = "string"/>
-        <property name = "salary" column = "salary" type = "int"/>
-
+        <column>
+            <objfieldname>firstname</objfieldname>
+            <colname>first_name</colname>
+            <type>string</type>
+        </column>
+        <column>
+            <objfieldname>lastname</objfieldname>
+            <colname>last_name</colname>
+            <type>string</type>
+        </column>
+        <column>
+            <objfieldname>salary</objfieldname>
+            <colname>salary</colname>
+            <type>int</type>
+        </column>
     </class>
 </map>

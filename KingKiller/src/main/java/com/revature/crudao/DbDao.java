@@ -177,7 +177,7 @@ public class DbDao {
                 }
                 objectsFromQuery.add(newObject);
             }
-        } catch (SQLException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return objectsFromQuery;

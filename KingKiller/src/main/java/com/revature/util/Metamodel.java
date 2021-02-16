@@ -1,5 +1,7 @@
 package com.revature.util;
 
+import com.revature.scapers.ModelScraper;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,7 +26,7 @@ public class Metamodel<T> {
      * sets the class type to the class coming in
      * @param clazz the class type of the metamodel
      */
-    private Metamodel(Class<T> clazz) {
+    public Metamodel(Class<T> clazz) {
         this.clazz = clazz;
     }
 
@@ -57,7 +59,9 @@ public class Metamodel<T> {
 
         List<ColumnField> columnFields = new ArrayList<>();
         Field[] fields = clazz.getDeclaredFields();
+        ArrayList<String> validCols = ModelScraper.getColumns(className);
         for (Field field : fields) {
+
 
             field.setAccessible(true);
             try {
