@@ -31,6 +31,12 @@ public class TestDriver {
         mapSession.create(eric);
         System.out.println("<________________>");
         List<Employee> firstQuery = (List<Employee>) mapSession.readAll(eric);
-        firstQuery.forEach(System.out::print);
+        for (Employee employee : firstQuery) {
+            System.out.println("<-----" + employee.getFirstName() + "-------");
+            System.out.println("lastname: " + employee.getLastName());
+            System.out.println("id: " + employee.getId());
+            System.out.println("salary: " + employee.getSalary());
+        }
+        //firstQuery.forEach(System.out::print);
     }
 }

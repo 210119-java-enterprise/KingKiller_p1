@@ -10,12 +10,12 @@
         </column>
 
         <column>
-            <objfieldname>firstname</objfieldname>
+            <objfieldname>firstName</objfieldname>
             <colname>first_name</colname>
             <type>string</type>
         </column>
         <column>
-            <objfieldname>lastname</objfieldname>
+            <objfieldname>lastName</objfieldname>
             <colname>last_name</colname>
             <type>string</type>
         </column>

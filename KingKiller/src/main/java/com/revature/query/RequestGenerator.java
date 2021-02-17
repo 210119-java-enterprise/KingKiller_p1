@@ -1,9 +1,11 @@
 package com.revature.query;
 
+import com.revature.scapers.ModelScraper;
 import com.revature.util.Metamodel;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class RequestGenerator {
     private String requestStatement;
@@ -79,16 +81,20 @@ public class RequestGenerator {
     private ArrayList<String> scrapeColumns(Object userObj){
         ArrayList<String> tableColumns = new ArrayList<>();
         Field[] fields = userObj.getClass().getDeclaredFields();
-        for(Field f : fields){
-            f.setAccessible(true);
-            try {
-                Object column = f.getName();
-                tableColumns.add(column.toString());
-            } catch (Exception e) {
-                //logger.debug("error getting obj values" + e.getMessage());
-                e.printStackTrace();
+        Map<String, String> colMap = ModelScraper.getColumnMap(userObj.getClass().getSimpleName());
+        for(Field field : fields){
+            if (colMap.containsKey(field.getName())) {
+                field.setAccessible(true);
+                try {
+                    Object column = field.getName();
+                    tableColumns.add(column.toString());
+                } catch (Exception e) {
+                    //logger.debug("error getting obj values" + e.getMessage());
+                    e.printStackTrace();
+                }
             }
         }
+        System.out.println("Scraped Columns in RequestGenerator: " + tableColumns.toString());
         return tableColumns;
     }
 

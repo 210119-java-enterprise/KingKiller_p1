@@ -101,7 +101,7 @@ public class Metamodel<T> {
         System.out.println("columns returned from query: " + this.getColumns());
         if (!this.getColumns().equals(null)) {
             for (ColumnField c : this.getColumns()) {
-                if (c.getFieldName().equals(columnName)) {
+                if (c.getFieldName().equalsIgnoreCase(columnName)) {
                     return c.getType();
                 }
             }
@@ -116,7 +116,7 @@ public class Metamodel<T> {
      */
     public String findFieldNameOfColumn(String columnName){
         for(ColumnField c : this.getColumns()){
-            if(c.getFieldName().equals(columnName)){
+            if(c.getFieldName().equalsIgnoreCase(columnName)){
                 return c.getFieldName();
             }
         }
