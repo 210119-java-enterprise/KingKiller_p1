@@ -5,12 +5,17 @@ import java.lang.reflect.Field;
 public class ColumnField {
 
     private Field field;
+    private String columnName;
+
+    public ColumnField(){
+
+    }
 
     public ColumnField(Field field) {
         this.field = field;
     }
 
-    public String getName() {
+    public String getFieldName() {
         return field.getName();
     }
 
@@ -20,7 +25,17 @@ public class ColumnField {
 
     //this is where we put the mapped information from the xml file basically
     public String getColumnName() {
-        return field.getName();
+        return columnName;
+    }
+    public void setColumnName(String colName) {
+        this.columnName = colName;
     }
 
+    @Override
+    public String toString() {
+        return "ColumnField{" +
+                "field=" + field +
+                ", columnName='" + columnName + '\'' +
+                '}';
+    }
 }

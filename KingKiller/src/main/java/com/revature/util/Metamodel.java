@@ -57,11 +57,13 @@ public class Metamodel<T> {
     public List<ColumnField> getColumns() {
         String className = clazz.getName();
 
-        List<ColumnField> columnFields = new ArrayList<>();
         Field[] fields = clazz.getDeclaredFields();
-        ArrayList<String> validCols = ModelScraper.getColumns(className);
+        List<ColumnField> columnFields = new LinkedList<>();//ModelScraper.getValidColumns(className);
+
         for (Field field : fields) {
 
+            //if field.getName = in validCols list then add to values
+            //otherwise we ignore the field because it isnt mapped
 
             field.setAccessible(true);
             try {
@@ -101,7 +103,6 @@ public class Metamodel<T> {
                 return c.getType();
             }
         }
-
         return null;
     }
 
@@ -113,7 +114,7 @@ public class Metamodel<T> {
     public String findFieldNameOfColumn(String columnName){
         for(ColumnField c : this.getColumns()){
             if(c.getColumnName().equals(columnName)){
-                return c.getName();
+                return c.getFieldName();
             }
         }
         return null;
