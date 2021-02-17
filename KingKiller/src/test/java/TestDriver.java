@@ -7,6 +7,7 @@ import com.revature.util.SessionManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class TestDriver {
     public static void main(String[] args) {
@@ -29,5 +30,7 @@ public class TestDriver {
         System.out.println("<________________>");
         mapSession.create(eric);
         System.out.println("<________________>");
+        List<Employee> firstQuery = (List<Employee>) mapSession.readAll(eric);
+        firstQuery.forEach(System.out::print);
     }
 }

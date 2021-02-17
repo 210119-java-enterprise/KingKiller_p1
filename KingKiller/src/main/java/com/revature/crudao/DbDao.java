@@ -4,7 +4,6 @@ import com.revature.query.RequestGenerator;
 import com.revature.util.Metamodel;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.ArrayList;
@@ -98,10 +97,12 @@ public class DbDao {
     public List<?> read(Metamodel<?> model, Object object){
         RequestGenerator generator = new RequestGenerator(model, object, "ReadAll");
         List<Object> listOfObjects = new LinkedList<>();
+        System.out.println("Read Request " + generator.getRequest());
         try{
             PreparedStatement pstmt = conn.prepareStatement(generator.getRequest());
             ResultSet rs = pstmt.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
+            //System.out.println(rs.toString());
             listOfObjects = mapResultSet(rs, rsmd, object, model);
         }catch(SQLException e){
             e.printStackTrace();
@@ -148,38 +149,50 @@ public class DbDao {
     /**
      * Maps result to object list
      * @param rs the result set returned from the database
-     * @param rsmd the result set meta data
+     * @param metaData the result set meta data
      * @param object the object composing the list
      * @return the list of objects returned from the database
      */
-    private List<Object> mapResultSet(ResultSet rs, ResultSetMetaData rsmd, Object object, Metamodel<?> model){
-        List<Object> objectsFromQuery = new LinkedList<>();
+    private List<Object> mapResultSet(ResultSet rs, ResultSetMetaData metaData, Object object, Metamodel<?> model){
+        List<Object> returnObjects = new LinkedList<>();
         try {
-            List<String> columnsInResultSet = new LinkedList<>();
-            int bound = rsmd.getColumnCount();
-            for(int i = 0; i < bound; i++){
-                columnsInResultSet.add(rsmd.getColumnName(i+1));
+            List<String> resultColumns = new LinkedList<>();
+            for(int i = 0; i < metaData.getColumnCount(); i++){
+                resultColumns.add(metaData.getColumnName(i+1));
             }
 
             while(rs.next()){
 
-                Object newObject = object.getClass().getConstructor().newInstance();
+                Object returnObject = object.getClass().getConstructor().newInstance();
 
-                for(String s : columnsInResultSet){
-                    Class<?> type = model.findColumnType(s);
-                    Object objectValue = rs.getObject(s);
+                for(String resultColumn : resultColumns){
+                    System.out.println("resultcolumn: " + resultColumn);
+                    Class<?> type = model.findColumnType(resultColumn);
 
-                    String name = model.findFieldNameOfColumn(s);
-                    String methodName = name.substring(0,1).toUpperCase() + name.substring(1);
+                    Object objectValue = rs.getObject(resultColumn);
 
-                    Method method = object.getClass().getMethod("set" + methodName, type);
-                    method.invoke(newObject, objectValue);
+                    String colName = model.findFieldNameOfColumn(resultColumn);
+                    System.out.println("column name: " + colName);
+                    String setMethod = colName.substring(0,1).toUpperCase() + colName.substring(1);
+                    System.out.println("method name: " + setMethod);
+
+                    Method method = object.getClass().getMethod("set" + setMethod, type);
+                    System.out.println("Method: " + method.toString());
+
+
+                    //todo HERES THE ISSUE!!!!
+                    System.out.println("Object value: " + objectValue.toString() + " + object type " + objectValue.getClass().getTypeName());
+
+
+
+                    System.out.println("Method type: " + type.getTypeName());
+                    method.invoke(returnObject, objectValue);
                 }
-                objectsFromQuery.add(newObject);
+                returnObjects.add(returnObject);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return objectsFromQuery;
+        return returnObjects;
     }
 }

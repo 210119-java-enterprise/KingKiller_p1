@@ -73,7 +73,8 @@ public class RequestGenerator {
 
     /**
      * Scrapes object for col names
-     * @param userObj target object
+     * @param userObj target objectList<User> firstQuery = (List<User>) session1.selectAll(user1);
+     *         firstQuery.forEach(System.out::print);
      */
     private ArrayList<String> scrapeColumns(Object userObj){
         ArrayList<String> tableColumns = new ArrayList<>();
@@ -116,6 +117,7 @@ public class RequestGenerator {
 
     private void updateStatement(String tableName, ArrayList<String> tableColumns){
         int bound = tableColumns.size();
+        tableName = tableName.substring(tableName.lastIndexOf('.') + 1).trim();
         StringBuilder set = new StringBuilder("SET ");
         StringBuilder where = new StringBuilder("WHERE ");
 
@@ -133,6 +135,7 @@ public class RequestGenerator {
 
     private void deleteStatement(String tableName, ArrayList<String> tableColumns){
         int bound = tableColumns.size();
+        tableName = tableName.substring(tableName.lastIndexOf('.') + 1).trim();
         StringBuilder where = new StringBuilder("WHERE ");
         for(int i = 0; i < bound; i++){
             if(i == (bound-1)){
@@ -149,6 +152,7 @@ public class RequestGenerator {
      * @param tableName the table to grab all rows and columns from
      */
     private void readTable(String tableName){
+        tableName = tableName.substring(tableName.lastIndexOf('.') + 1).trim();
         requestStatement = "SELECT " + " * " + "FROM " + " " + tableName;
     }
 
@@ -159,6 +163,7 @@ public class RequestGenerator {
      * @param tableColumns the array of column names within the table
      */
     private void readColumns(String tableName, ArrayList<String> tableColumns){
+        tableName = tableName.substring(tableName.lastIndexOf('.') + 1).trim();
         int bound = tableColumns.size();
         StringBuilder select = new StringBuilder("SELECT ");
         for(int i = 0; i < bound; i++){

@@ -33,7 +33,7 @@ public class ModelScraper {
             doc.getDocumentElement().normalize();
             System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 
-            //should check through here to make sure we don't have the class declared below current one 
+            //should check through here to make sure we don't have the class declared below current one
             NodeList nameList = doc.getElementsByTagName("name");
             String nameString = nameList.item(0).getTextContent();
 

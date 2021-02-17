@@ -86,7 +86,7 @@ public class Metamodel<T> {
     public List<String> getColumnNames(){
         List<String> columnNames = new LinkedList<>();
         for(ColumnField c : this.getColumns()){
-            columnNames.add(c.getColumnName());
+            columnNames.add(c.getFieldName());
         }
         return columnNames;
     }
@@ -98,9 +98,12 @@ public class Metamodel<T> {
      * @return the class type of column, null if not found
      */
     public Class<?> findColumnType(String columnName){
-        for(ColumnField c : this.getColumns()){
-            if(c.getColumnName().equals(columnName)){
-                return c.getType();
+        System.out.println("columns returned from query: " + this.getColumns());
+        if (!this.getColumns().equals(null)) {
+            for (ColumnField c : this.getColumns()) {
+                if (c.getFieldName().equals(columnName)) {
+                    return c.getType();
+                }
             }
         }
         return null;
@@ -113,7 +116,7 @@ public class Metamodel<T> {
      */
     public String findFieldNameOfColumn(String columnName){
         for(ColumnField c : this.getColumns()){
-            if(c.getColumnName().equals(columnName)){
+            if(c.getFieldName().equals(columnName)){
                 return c.getFieldName();
             }
         }
