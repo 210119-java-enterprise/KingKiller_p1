@@ -37,7 +37,7 @@ public class DbQueryService {
         if(object == null){
             throw new RuntimeException("obj null");
         }
-        delete(model, object);
+        queryDao.delete(model, object);
     }
 
     /**

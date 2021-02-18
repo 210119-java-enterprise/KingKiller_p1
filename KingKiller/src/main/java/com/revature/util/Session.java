@@ -17,9 +17,9 @@ import org.apache.logging.log4j.Logger;
  * @since   2021-01-27
  */
 public class Session {
-    private final SessionManager sessionManager;
 
-    private final DbQueryService dml;
+    private final SessionManager sessionManager;
+    private final DbQueryService dbQueryService;
 
     /**
      * Creates a new session
@@ -29,8 +29,7 @@ public class Session {
     Session(Connection connection, SessionManager sessionManager){
         this.sessionManager = sessionManager;
         final DbDao dao = new DbDao(connection);
-
-        dml = new DbQueryService(dao);
+        dbQueryService = new DbQueryService(dao);
     }
 
     /**
@@ -42,7 +41,7 @@ public class Session {
         if(model == null){
             throw new RuntimeException("No metamodel was found of class " + object.getClass().getName());
         }
-        dml.create(model, object);
+        dbQueryService.create(model, object);
     }
 
     /**
@@ -55,10 +54,10 @@ public class Session {
             throw new RuntimeException("Classes of the passed objects are not equal");
         }
         Metamodel<?> model = getModel(oldObject);
-        if(model == null){
-            throw new RuntimeException("Could not find class name for object within metamodel list!");
+        if (model == null) {
+            System.out.println("Could not generate model for update");
         }
-        dml.update(model, newObject, oldObject);
+        dbQueryService.update(model, newObject, oldObject);
     }
 
     /**
@@ -68,9 +67,9 @@ public class Session {
     public void delete(Object object){
         Metamodel<?> model = getModel(object);
         if(model == null){
-            throw new RuntimeException("Could not find class name for object within metamodel list!");
+            throw new RuntimeException("Could not generate model for delete");
         }
-        dml.delete(model, object);
+        dbQueryService.delete(model, object);
     }
 
     /**
@@ -82,7 +81,7 @@ public class Session {
         if(model == null){
             throw new RuntimeException("Could not find class name for object within metamodel list!");
         }
-        return dml.read(model, object);
+        return dbQueryService.read(model, object);
     }
 
     /**
@@ -95,7 +94,7 @@ public class Session {
         if(model == null){
             throw new RuntimeException("Could not find class name for object within metamodel list!");
         }
-        return dml.readFrom(model, object, columnNames);
+        return dbQueryService.readFrom(model, object, columnNames);
     }
 
     /**

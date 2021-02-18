@@ -98,7 +98,7 @@ public class Metamodel<T> {
      * @return the class type of column, null if not found
      */
     public Class<?> findColumnType(String columnName){
-        System.out.println("columns returned from query: " + this.getColumns());
+        //System.out.println("columns returned from query: " + this.getColumns());
         if (!this.getColumns().equals(null)) {
             for (ColumnField c : this.getColumns()) {
                 if (c.getFieldName().equalsIgnoreCase(columnName)) {

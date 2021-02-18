@@ -41,11 +41,11 @@ public class DbDao {
                 System.out.print("Inserting field value: " + fieldValue.toString());
                 System.out.println("");
 
-                Class<?> classType = objectFields.get(i).getType();
-                System.out.println(classType.getSimpleName());
-                objectFields.get(i);
-                if (objectFields.get(i).getType().getTypeName().equals("int")) {
-                    System.out.println("Found integer type during insertion making cast");
+                String fieldClassType = objectFields.get(i).getType().getTypeName();
+                System.out.println("Field class type in create statement: " + fieldClassType);
+
+                if (fieldClassType.equals("int")) {
+                    System.out.println("Found integer type during insertion - making cast");
                     pstmt.setObject(i + 1, fieldValue, Types.INTEGER);
                 } else {
                     pstmt.setObject(i + 1, fieldValue);
@@ -62,8 +62,6 @@ public class DbDao {
         }
     }
 
-
-
     /**
      * Updates some data into a database
      * @param model the model of the class being created
@@ -72,20 +70,52 @@ public class DbDao {
      */
     public void update(Metamodel<?> model, Object newObject, Object oldObject){
         RequestGenerator generator = new RequestGenerator(model, oldObject, "Update");
-        ArrayList<Field> oldObjectValues = getObjectFields(oldObject);
-        ArrayList<Field> newObjectValues = getObjectFields(newObject);
+        ArrayList<Field> oldObjectFields = getObjectFields(oldObject);
+        ArrayList<Field> newObjectFields = getObjectFields(newObject);
 
         try{
             PreparedStatement pstmt = conn.prepareStatement(generator.getRequest());
+            for(int i = 0; i < oldObjectFields.size(); i++){
+                Object oldFieldValue = oldObjectFields.get(i).get(oldObject);
+                System.out.print(" Replacing field name: " + oldObjectFields.get(i).getName());
+                System.out.print(" Replacing field type: " + oldObjectFields.get(i).getType());
+                System.out.print(" Replacing field value: " + oldFieldValue.toString());
+                System.out.println("");
 
-            for(int i = 0; i < oldObjectValues.size(); i++){
-                pstmt.setObject(i+1, newObjectValues.get(i).getName());
-                pstmt.setObject(i+5, oldObjectValues.get(i).getName());
+                String oldFieldType = oldObjectFields.get(i).getType().getTypeName();
+                System.out.println("Old field class type in create statement: " + oldFieldType);
+
+                if (oldFieldType.equals("int")) {
+                    System.out.println("Found integer type in old object during update - making cast");
+                    pstmt.setObject(i + 1, oldFieldValue, Types.INTEGER);
+                } else {
+                    pstmt.setObject(i + 1, oldFieldValue);
+                }
             }
+            for (int i = 0; i < newObjectFields.size(); i++) {
+                Object newFieldValue = newObjectFields.get(i).get(newObject);
+                System.out.print(" Name to be set in update: " + newObjectFields.get(i).getName());
+                System.out.print(" Field type to be set in updatee: " + newObjectFields.get(i).getType());
+                System.out.print(" Field value to be set in update: " + newFieldValue.toString());
+                System.out.println("");
+
+                String newFieldType = newObjectFields.get(i).getType().getTypeName();
+                System.out.println("New field class type in create statement: " + newFieldType);
+
+                if (newFieldType.equals("int")) {
+                    System.out.println("Found integer type in new object during update - making cast");
+                    pstmt.setObject(i + 5, newFieldValue, Types.INTEGER);
+                } else {
+                    pstmt.setObject(i + 5, newFieldValue);
+                }
+            }
+            System.out.println("<---------------------------------------->");
+            System.out.println("Prepared update statement: " + pstmt.toString());
+            System.out.println("<---------------------------------------->");
 
             pstmt.executeUpdate();
 
-        }catch(SQLException e){
+        }catch(SQLException | IllegalAccessException e){
             e.printStackTrace();
         }
     }
@@ -97,17 +127,31 @@ public class DbDao {
      */
     public void delete(Metamodel<?> model, Object object){
         RequestGenerator generator = new RequestGenerator(model, object, "Delete");
-        ArrayList<Field> objectValues = getObjectFields(object);
+        ArrayList<Field> objectFields = getObjectFields(object);
         try{
             PreparedStatement pstmt = conn.prepareStatement(generator.getRequest());
 
-            for(int i = 0; i < objectValues.size(); i++){
-                pstmt.setObject(i + 1, objectValues.get(i));
+            for(int i = 0; i < objectFields.size(); i++){
+
+                Object fieldValue = objectFields.get(i).get(object);
+                String fieldClassType = objectFields.get(i).getType().getTypeName();
+                System.out.println("Field class type in delete statement: " + fieldClassType);
+
+                if (fieldClassType.equals("int")) {
+                    System.out.println("Found integer type during deletion - making cast");
+                    pstmt.setObject(i + 1, fieldValue, Types.INTEGER);
+                } else {
+                    pstmt.setObject(i + 1, fieldValue);
+                }
             }
+
+            System.out.println("<---------------------------------------->");
+            System.out.println("Prepared delete statement: " + pstmt.toString());
+            System.out.println("<---------------------------------------->");
 
             pstmt.executeUpdate();
 
-        }catch(SQLException e){
+        }catch(SQLException | IllegalAccessException e){
             e.printStackTrace();
         }
     }
@@ -182,6 +226,7 @@ public class DbDao {
      * @return the list of objects returned from the database
      */
     private List<Object> mapResultSet(ResultSet rs, ResultSetMetaData metaData, Object object, Metamodel<?> model){
+        //System.out.println("<------------------QUERY RESULTS---------------------->");
         List<Object> returnObjects = new LinkedList<>();
         try {
             List<String> resultColumns = new LinkedList<>();
@@ -190,23 +235,30 @@ public class DbDao {
             }
             //System.out.println("Result columns: " + resultColumns.toString());
             while(rs.next()){
+                //System.out.println("<------------------NEXT RESULT---------------------->");
 
                 Object returnObject = object.getClass().getConstructor().newInstance();
                 for(String resultColumn : resultColumns){
-                    System.out.println("_______________RESULT INFO HERE_____________");
-                    System.out.println("resultcolumn: " + resultColumn);
+//                    System.out.println("<---------------------------------------->");
+//                    System.out.println("MAPPING RESULT (column): " + resultColumn);
+//                    System.out.println("<---------------------------------------->");
+
+                    String colName = model.findFieldNameOfColumn(resultColumn);
+//                    System.out.println("Column Name: " + colName);
+
                     Class<?> type = model.findColumnType(resultColumn);
+//                    System.out.println("Col Type: " + type.getSimpleName());
 
                     Object objectValue = rs.getObject(resultColumn);
-
-                    String colName = model.findFieldNameOfColumn(resultColumn); // they are getting a field name from a result sql col
+//                    System.out.println("Result value: " + objectValue.toString());
+                     // getting a field name from a result sql col
                     //Map<String, String> colMap = ModelScraper.getColumnMap()
-                    System.out.println("column name: " + colName);
+
                     String setMethod = colName.substring(0,1).toUpperCase() + colName.substring(1);
-                    System.out.println("method name: " + setMethod);
+                    //System.out.println("method name: " + setMethod);
 
                     Method method = object.getClass().getMethod("set" + setMethod, type);
-                    //System.out.println("Method: " + method.toString());
+//                    System.out.println("Method: " + method.toString());
 
 
                     //todo HERES THE ISSUE!!!!
