@@ -19,8 +19,9 @@ public class RequestGenerator {
         this.requestType = requestType;
     }
 
-    public RequestGenerator(Metamodel<?> model, ArrayList<String> columnNames, String requestType){
+    public RequestGenerator(Metamodel<?> model, Object object, ArrayList<String> columnNames, String requestType){
         requestStatement = "";
+        userObj = object;
         readCols = columnNames;
         this.requestType = requestType;
     }

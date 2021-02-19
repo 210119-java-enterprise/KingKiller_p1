@@ -19,7 +19,8 @@ public class Mapper {
     private List<Metamodel<Class<?>>> modelList;
 
     public Mapper(String configPath) {
-        ConfigData appConfig = new ConfigScraper().ScrapeConfig(configPath); //get db connection info
+        ConfigScraper configScraper = new ConfigScraper();
+        ConfigData appConfig = configScraper.ScrapeConfig(configPath);
         connectionPool = new ConnectionFactory(appConfig); //connections avaliable
         modelList = new LinkedList<>();
     }

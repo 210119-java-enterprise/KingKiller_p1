@@ -183,7 +183,7 @@ public class DbDao {
      * @param columnNames the list of column names specified by the user
      */
     public List<?> read(Metamodel<?> model, Object object, ArrayList<String> columnNames){
-        RequestGenerator generator = new RequestGenerator(model, object, "ReadCols");
+        RequestGenerator generator = new RequestGenerator(model, object, columnNames, "ReadCols");
         List<Object> listOfObjects = new LinkedList<>();
         try{
             PreparedStatement pstmt = conn.prepareStatement(generator.getRequest());
@@ -204,8 +204,6 @@ public class DbDao {
         System.out.println("Column Map in getFields call of dbdao: " + columnMap.toString());
         for(Field field : fields){
             if (columnMap.containsKey(field.getName())) {
-
-
                 field.setAccessible(true);
                 try {
                     objectValues.add(field);
@@ -239,26 +237,26 @@ public class DbDao {
 
                 Object returnObject = object.getClass().getConstructor().newInstance();
                 for(String resultColumn : resultColumns){
-//                    System.out.println("<---------------------------------------->");
-//                    System.out.println("MAPPING RESULT (column): " + resultColumn);
-//                    System.out.println("<---------------------------------------->");
+                    System.out.println("<---------------------------------------->");
+                    System.out.println("MAPPING RESULT (column): " + resultColumn);
+                    System.out.println("<---------------------------------------->");
 
                     String colName = model.findFieldNameOfColumn(resultColumn);
-//                    System.out.println("Column Name: " + colName);
+                    System.out.println("Column Name: " + colName);
 
                     Class<?> type = model.findColumnType(resultColumn);
-//                    System.out.println("Col Type: " + type.getSimpleName());
+                    System.out.println("Col Type: " + type.getSimpleName());
 
                     Object objectValue = rs.getObject(resultColumn);
-//                    System.out.println("Result value: " + objectValue.toString());
-                     // getting a field name from a result sql col
-                    //Map<String, String> colMap = ModelScraper.getColumnMap()
+                    System.out.println("Result value: " + objectValue.toString());
+//                      getting a field name from a result sql col
+                    //Map<String, String> colMap = ModelScraper.getColumnMap();
 
                     String setMethod = colName.substring(0,1).toUpperCase() + colName.substring(1);
-                    //System.out.println("method name: " + setMethod);
+                    System.out.println("method name: " + setMethod);
 
                     Method method = object.getClass().getMethod("set" + setMethod, type);
-//                    System.out.println("Method: " + method.toString());
+                    System.out.println("Method: " + method.toString());
 
 
                     //todo HERES THE ISSUE!!!!
@@ -266,7 +264,7 @@ public class DbDao {
 
 
 
-                    //System.out.println("Method type: " + type.getTypeName());
+//                    System.out.println("Method type: " + type.getTypeName());
                     method.invoke(returnObject, objectValue);
                 }
                 returnObjects.add(returnObject);
