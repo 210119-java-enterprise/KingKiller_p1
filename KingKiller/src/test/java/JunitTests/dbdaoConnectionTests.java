@@ -12,12 +12,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class dbdaoConnectionTests {
 
     private Metamodel<?> model;
-    private Employee eric;
     private DbDao dbDao;
     private Mapper mapper;
     private SessionManager sessionManager;
@@ -31,7 +32,7 @@ public class dbdaoConnectionTests {
         sessionManager = mapper.getSessionManager();
         dbSession = sessionManager.getSession();
         mapper.Map(Employee.class); //think this sets metamodel?
-
+        Employee eric = new Employee();
         eric.setFirstName("test");
         eric.setId(96);
         eric.setLastName("one");
@@ -43,8 +44,16 @@ public class dbdaoConnectionTests {
 
     @Test
     @DisplayName("GetConfigurationDataFromFile")
-    public void scrapeConfig() {
-        //????
+    public void checkConnections() {
+        try {
+            assertEquals(false, dbSession.getConnection().isClosed(),
+                    "Connection not open in dbSession");
+            assertEquals(false, sessionManager.getSession().getConnection().isClosed(),
+                    "Session managers new sessions connection is not open");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
     }
 
 }

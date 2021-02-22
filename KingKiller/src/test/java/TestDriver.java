@@ -20,18 +20,23 @@ public class TestDriver {
         ModelScraper modelScraper = new ModelScraper();
 
         //System.out.println("Class name: " + modelScraper.getClassName("src/main/resources/Employee.map.xml"));
-        HashMap<String, String> tableFields = new HashMap<>();
-        tableFields = ModelScraper.getColumnMap("AppUser");
-        System.out.println(tableFields.toString());
-        ModelScraper.getTableName("AppUser");
+//        HashMap<String, String> tableFields = new HashMap<>();
+//        tableFields = ModelScraper.getColumnMap("AppUser");
+//        System.out.println(tableFields.toString());
+        ModelScraper.getTableName("Employee");
 
 
 //
         Employee eric = new Employee();
-        eric.setFirstName("test");
+        eric.setFirstName("eric");
         //eric.setId(69);
-        eric.setLastName("one");
-        eric.setSalary(100.07);
+        eric.setLastName("newman");
+        //eric.setSalary(100.07);
+        Employee testsqlcase = new Employee();
+        testsqlcase.setFirstName("testsqlcase");
+        //test.setId(69);
+        //test.setLastName("newman");
+        //test.setSalary(100.07);
 
 //        Employee eric2 = new Employee();
 //        eric2.setFirstName("testupdate");
@@ -41,27 +46,14 @@ public class TestDriver {
 //
 //
 //        //System.out.println("<-----------------RUNNING DELETE--------------------->");
-//        //mapSession.delete(eric);
+        mapSession.delete(testsqlcase);
 //        //System.out.println("<-----------------RUNNING CREATE--------------------->");
-        mapSession.create(eric);
+        //mapSession.create(eric);
 //        //System.out.println("<-----------------RUNNING UPDATE--------------------->");
-////        mapSession.update(eric, eric2);
+       //mapSession.update(eric, eric2);
 ////
 ////
-////        List<Employee> queryRead = (List<Employee>) mapSession.readAll(eric);
-////        System.out.println("<-----------------LISTING READ QUERY RESULTS--------------------->");
-////        for (Employee employee : queryRead) {
-////            System.out.println("<-----" + employee.getFirstName() + "------->");
-////            System.out.println("lastname: " + employee.getLastName());
-////            System.out.println("id: " + employee.getId());
-////            System.out.println("salary: " + employee.getSalary());
-////        }
-//
-//        System.out.println("<-----------------getting specific columns--**NOT WORKING USEFULLY------------------->");
-//        ArrayList<String> colList = new ArrayList<>();
-//        colList.add("firstName");
-//        colList.add("lastName");
-//        List<Employee> queryRead = (List<Employee>) mapSession.readCols(eric, colList);
+//        List<Employee> queryRead = (List<Employee>) mapSession.readAll(eric);
 //        System.out.println("<-----------------LISTING READ QUERY RESULTS--------------------->");
 //        for (Employee employee : queryRead) {
 //            System.out.println("<-----" + employee.getFirstName() + "------->");
@@ -69,6 +61,19 @@ public class TestDriver {
 //            System.out.println("id: " + employee.getId());
 //            System.out.println("salary: " + employee.getSalary());
 //        }
+//
+//        System.out.println("<-----------------getting specific columns--**NOT WORKING USEFULLY------------------->");
+        ArrayList<String> colList = new ArrayList<>();
+        colList.add("firstName");
+        colList.add("lastName");
+        List<Employee> queryRead = (List<Employee>) mapSession.findByField(eric, colList);
+        System.out.println("<-----------------LISTING READ QUERY RESULTS--------------------->");
+        for (Employee employee : queryRead) {
+            System.out.println("<-----" + employee.getFirstName() + "------->");
+            System.out.println("lastname: " + employee.getLastName());
+            System.out.println("id: " + employee.getId());
+            System.out.println("salary: " + employee.getSalary());
+        }
 //
 
 

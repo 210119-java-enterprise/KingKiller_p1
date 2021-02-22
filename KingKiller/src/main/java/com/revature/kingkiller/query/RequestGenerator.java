@@ -39,6 +39,8 @@ public class RequestGenerator {
             return getReadAllStatement();
         } else if (requestType == "CreateNoId") {
             return getInsertStatementNoId();
+        } else if (requestType == "FindByField") {
+            return getFindByField();
         }
         return null;
     }
@@ -83,6 +85,11 @@ public class RequestGenerator {
         return requestStatement;
     }
 
+    private String getFindByField() {
+        String tableName = userObj.getClass().getName();
+        findByField(tableName, readCols);
+        return requestStatement;
+    }
     /**
      * Scrapes object for col names
      * @param userObj target objectList<User> firstQuery = (List<User>) session1.selectAll(user1);
@@ -178,11 +185,10 @@ public class RequestGenerator {
     }
 
     private void deleteStatement(String tableName, ArrayList<String> tableColumns){
-        int bound = tableColumns.size();
         tableName = tableName.substring(tableName.lastIndexOf('.') + 1).trim();
         StringBuilder where = new StringBuilder("WHERE ");
-        for(int i = 0; i < bound; i++){
-            if(i == (bound-1)){
+        for(int i = 0; i < tableColumns.size(); i++){
+            if(i == (tableColumns.size() -1)){
                 where.append(tableColumns.get(i)).append(" = ").append(" ? ").append(" ");
             }else {
                 where.append(tableColumns.get(i)).append(" = ").append(" ? ").append(" and ");
@@ -206,6 +212,32 @@ public class RequestGenerator {
      * @param tableName the name of the table having the data inserted into
      * @param tableColumns the array of column names within the table
      */
+    private void findByField(String tableName, ArrayList<String> tableColumns){
+        System.out.println("[INFO] - RequestGenerator.findByField - table columns coming in: " + tableColumns.toString());
+
+        tableName = tableName.substring(tableName.lastIndexOf('.') + 1).trim();
+        readTable(tableName);
+        String base = requestStatement;
+        System.out.println("[INFO] - RequestGenerator.findByField - base statement: " + base);
+        StringBuilder where = new StringBuilder(" WHERE ");
+        for(int i = 0; i < tableColumns.size(); i++){
+            if(i == (tableColumns.size()-1)){
+                where.append(tableColumns.get(i)).append(" = ").append(" ? ").append(" ");
+            }else {
+                where.append(tableColumns.get(i)).append(" = ").append(" ? ").append(" and ");
+            }
+        }
+        System.out.println("[INFO] - RequestGenerator.findByField - base and where statement to be filled: " + base + where.toString());
+        requestStatement = base + where.toString();
+    }
+
+
+    /**
+     * Builds the SQL statement, sits in a private method to lessen the length of
+     * the constructor
+     * @param tableName the name of the table having the data inserted into
+     * @param tableColumns the array of column names within the table
+     */
     private void readColumns(String tableName, ArrayList<String> tableColumns){
         tableName = tableName.substring(tableName.lastIndexOf('.') + 1).trim();
         int bound = tableColumns.size();
@@ -219,6 +251,8 @@ public class RequestGenerator {
         }
         requestStatement = select.toString() + "FROM " + " " + tableName;
     }
+
+
 
 
 

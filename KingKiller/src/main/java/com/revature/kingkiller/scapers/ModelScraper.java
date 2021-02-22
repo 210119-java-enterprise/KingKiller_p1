@@ -95,6 +95,8 @@ public class ModelScraper {
                             fieldColName = eElement.getElementsByTagName("colname").item(fieldCount).getTextContent();
                             fieldMap.put(objFieldName, fieldColName);
                         }
+                        //break out of loop once map found
+                        i+=classList.getLength();
                     }
                 }
             }

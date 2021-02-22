@@ -102,6 +102,19 @@ public class Session {
      * @param object the object to pull from
      * @param columnNames target columns
      */
+    public List<?> findByField(Object object, ArrayList<String> columnNames){
+        Metamodel<?> model = getModel(object);
+        if(model == null){
+            throw new RuntimeException("Could not find class name for object within metamodel list!");
+        }
+        return dbQueryService.findByField(model, object, columnNames);
+    }
+
+    /**
+     * Reads a certain column from an obj
+     * @param object the object to pull from
+     * @param columnNames target columns
+     */
     public List<?> readCols(Object object, ArrayList<String> columnNames){
         Metamodel<?> model = getModel(object);
         if(model == null){

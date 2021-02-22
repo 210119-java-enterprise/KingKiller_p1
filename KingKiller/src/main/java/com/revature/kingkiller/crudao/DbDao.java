@@ -1,5 +1,6 @@
 package com.revature.kingkiller.crudao;
 
+import com.revature.kingkiller.models.Employee;
 import com.revature.kingkiller.scapers.ModelScraper;
 import com.revature.kingkiller.query.RequestGenerator;
 import com.revature.kingkiller.util.ConnectionFactory;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static jdk.nashorn.internal.objects.NativeArray.lastIndexOf;
 
 public class DbDao {
 
@@ -234,6 +237,59 @@ public class DbDao {
         }
         return listOfObjects;
     }
+
+
+    /**
+     * reads from specific columns
+     * @param model the table being readed
+     * @param object the object being passed by the user
+     * @param columnNames the list of column names specified by the user
+     */
+    public List<?> findByField(Metamodel<?> model, Object object, ArrayList<String> columnNames){
+        System.out.println("[INFO] - DbDao.findByField - columns being searched:  " + columnNames.toString());
+        RequestGenerator generator = new RequestGenerator(model, object, columnNames, "FindByField");
+        List<Object> listOfObjects = new LinkedList<>();
+        Map<String, String> columnMap = ModelScraper.getColumnMap(object.getClass().getSimpleName());
+
+        //list of fields from the current object
+        //should just have the two we need
+        ArrayList<Field> objectFields = getObjectFields(object);
+        try{
+            PreparedStatement pstmt = conn.prepareStatement(generator.getRequest());
+
+
+            //go through each column name in search - check if its in map and if it is pull field value?
+            for(Field field : objectFields) {
+                if(columnMap.containsKey(field.getName())) {
+                    //we have fields and cols mapped and the string just need to replace values now where appropriate
+                    for(int i = 0; i < columnNames.size(); i++){
+                        if (columnNames.get(i).equals(field.getName().substring(field.getName().lastIndexOf('.') + 1).trim())) {
+                            // a replacement target for pstmt
+                            if (field.getType().equals("int")) {
+                                System.out.println("Found integer in search field ");
+                                pstmt.setObject(i + 1, field.get(object), Types.INTEGER);
+                            } else {
+                                pstmt.setObject(i + 1, field.get(object));
+                            }
+                            i+= columnNames.size();
+                        }
+
+                    }
+                }
+            }
+
+            System.out.println("prepared statmeent: " + pstmt);
+            ResultSet rs = pstmt.executeQuery();
+            ResultSetMetaData rsmd = rs.getMetaData();
+            listOfObjects = mapResultSet(rs, rsmd, object, model);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return listOfObjects;
+
+    }
+
+
 
     /**
      * reads from specific columns

@@ -87,4 +87,16 @@ public class DbQueryService {
         return queryDao.read(model, object, columnNames);
     }
 
+    /**
+     * reads certain columns
+     * @param object current class instance
+     * @param columnNames columns checking
+     */
+    public List<?> findByField(Metamodel<?> model, Object object, ArrayList<String> columnNames){
+        if(object == null || columnNames == null){
+            throw new RuntimeException("null input");
+        }
+        return queryDao.findByField(model, object, columnNames);
+    }
+
 }
