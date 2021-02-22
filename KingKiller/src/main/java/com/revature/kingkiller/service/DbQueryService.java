@@ -6,10 +6,18 @@ import com.revature.kingkiller.util.Metamodel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DBQueryService that acts as a service handler for the dbdao. It takes incoming CRUD requests and cleans them up
+ * before forwarding them to the dao.
+ */
 public class DbQueryService {
 
     private DbDao queryDao;
 
+    /**
+     * Constructor taking in a database access object
+     * @param dao database access object that gives us access to jdbc calls
+     */
     public DbQueryService(DbDao dao){
         queryDao = dao;
     }
@@ -23,7 +31,7 @@ public class DbQueryService {
         if(object == null){
             throw new RuntimeException("obj null");
         }
-        queryDao.create(model, object);
+        queryDao.create(object);
     }
 
     /**
@@ -35,7 +43,7 @@ public class DbQueryService {
         if(object == null){
             throw new RuntimeException("obj null");
         }
-        queryDao.createNoId(model, object);
+        queryDao.createNoId(object);
     }
 
     /**
@@ -47,7 +55,7 @@ public class DbQueryService {
         if(object == null){
             throw new RuntimeException("obj null");
         }
-        queryDao.delete(model, object);
+        queryDao.delete(object);
     }
 
     /**
@@ -60,7 +68,7 @@ public class DbQueryService {
         if(newObject == null | oldObject == null){
             throw new RuntimeException("Invalid object passed");
         }
-        queryDao.update(model, newObject, oldObject);
+        queryDao.update(newObject, oldObject);
     }
 
     /**

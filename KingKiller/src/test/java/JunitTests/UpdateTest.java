@@ -2,7 +2,7 @@ package JunitTests;
 
 import com.revature.kingkiller.Mapper;
 import com.revature.kingkiller.crudao.DbDao;
-import com.revature.kingkiller.models.Employee;
+import models.Employee;
 import com.revature.kingkiller.util.Metamodel;
 import com.revature.kingkiller.util.Session;
 import com.revature.kingkiller.util.SessionManager;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,7 +46,6 @@ public class UpdateTest {
         newman.setId(13);
         newman.setLastName("jeffrey");
         newman.setSalary(1000);
-        //dbSession.create(newman);
     }
 
 

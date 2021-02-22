@@ -13,14 +13,14 @@ import java.io.File;
 /**
  * Gets configuration information from config file in properties for use during DB
  * connection setup.
- *
- * TODO - need to print to log file when fails instead of just stacktrace out
  */
 public class ConfigScraper {
 
-    public ConfigScraper() {
-    }
-
+    /**
+     * Scrapes configuration data for the database connection from the config file specified by the user.
+     * @param cfgPath
+     * @return
+     */
     public ConfigData ScrapeConfig(String cfgPath) {
         ConfigData configData = new ConfigData();
         try {
@@ -32,7 +32,6 @@ public class ConfigScraper {
             doc.getDocumentElement().normalize();
             //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
             NodeList nList = doc.getElementsByTagName("dbConfig");
-            //System.out.println("----------------------------");
 
             for (int temp = 0; temp < nList.getLength(); temp++) {
                 Node nNode = nList.item(temp);
@@ -40,27 +39,12 @@ public class ConfigScraper {
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
-//                    //System.out.println("URL : "
-//                            + eElement
-//                            .getElementsByTagName("url")
-//                            .item(0)
-//                            .getTextContent());
                     configData.setUrl(eElement.getElementsByTagName("url")
                                                 .item(0)
                                                 .getTextContent());
-//                    //System.out.println("Username : "
-//                            + eElement
-//                            .getElementsByTagName("username")
-//                            .item(0)
-//                            .getTextContent());
                     configData.setUsername(eElement.getElementsByTagName("username")
                             .item(0)
                             .getTextContent());
-//                    //System.out.println("Password : "
-//                            + eElement
-//                            .getElementsByTagName("password")
-//                            .item(0)
-//                            .getTextContent());
                     configData.setPassword(eElement.getElementsByTagName("password")
                             .item(0)
                             .getTextContent());

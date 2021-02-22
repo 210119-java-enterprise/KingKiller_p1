@@ -7,11 +7,8 @@ import com.revature.kingkiller.crudao.DbDao;
 import com.revature.kingkiller.service.DbQueryService;
 
 /**
- * Session
-
- * @author  Eric Newman
- * @version 1.0
- * @since   2021-01-27
+ * Session objects are kind of like the transaction managers in other orms. They actually call the CRUD logic and
+ * send off calls to the service object when needed.
  */
 public class Session {
 
@@ -149,7 +146,7 @@ public class Session {
             }
             else {
                 //attempt to set connection properly in session and return it
-                this.connection = ConnectionFactory.getConnection();
+                this.connection = sessionManager.getConnection();
                 return connection;
             }
         } catch (Exception e) {

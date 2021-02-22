@@ -1,11 +1,10 @@
 import com.revature.kingkiller.Mapper;
-import com.revature.kingkiller.models.Employee;
+import models.Employee;
 import com.revature.kingkiller.scapers.ModelScraper;
 import com.revature.kingkiller.util.Session;
 import com.revature.kingkiller.util.SessionManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class TestDriver {

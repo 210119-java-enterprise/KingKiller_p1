@@ -1,6 +1,5 @@
 package com.revature.kingkiller.crudao;
 
-import com.revature.kingkiller.models.Employee;
 import com.revature.kingkiller.scapers.ModelScraper;
 import com.revature.kingkiller.query.RequestGenerator;
 import com.revature.kingkiller.util.ConnectionFactory;
@@ -14,8 +13,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static jdk.nashorn.internal.objects.NativeArray.lastIndexOf;
-
+/**
+ * Dataabase connection class that provides direct access to database
+ */
 public class DbDao {
 
     private Connection conn;
@@ -26,17 +26,16 @@ public class DbDao {
 
     /**
      * creates some user specified data in db
-     * @param model the model of the class being created
      * @param object the data being persisted
      */
-    public void create(Metamodel<?> model, Object object){
-        RequestGenerator generator = new RequestGenerator(model, object, "Create");
+    public void create(Object object){
+        RequestGenerator generator = new RequestGenerator(object, "Create");
         ArrayList<Field> objectFields = getObjectFields(object);
 
-        System.out.println("Create Request: " + generator.getRequest());
+        //System.out.println("Create Request: " + generator.getRequest());
 
         try {
-            if (conn.isClosed() == true) {
+            if (conn.isClosed()) {
                 conn = ConnectionFactory.getConnection();
             }
         } catch (Exception e) {
@@ -48,25 +47,25 @@ public class DbDao {
             //THERE NEEDS TO BE SOME CHANGING ON THE VALUES GATHERED TO BETTER REPRESENT THEM IN SQL
             for(int i = 0; i < objectFields.size(); i++){
                 Object fieldValue = objectFields.get(i).get(object);
-                System.out.print("Inserting field name: " + objectFields.get(i).getName());
-                System.out.print(" inserting field type: " + objectFields.get(i).getType());
-                System.out.print("Inserting field value: " + fieldValue.toString());
-                System.out.println("");
+                //System.out.print("Inserting field name: " + objectFields.get(i).getName());
+                //System.out.print(" inserting field type: " + objectFields.get(i).getType());
+                //System.out.print("Inserting field value: " + fieldValue.toString());
+                //System.out.println("");
 
                 String fieldClassType = objectFields.get(i).getType().getTypeName();
-                System.out.println("Field class type in create statement: " + fieldClassType);
+                //System.out.println("Field class type in create statement: " + fieldClassType);
 
                 if (fieldClassType.equals("int")) {
-                    System.out.println("Found integer type during insertion - making cast");
+                    //System.out.println("Found integer type during insertion - making cast");
                     pstmt.setObject(i + 1, fieldValue, Types.INTEGER);
                 } else {
                     pstmt.setObject(i + 1, fieldValue);
                 }
 
             }
-            System.out.println("<---------------------------------------->");
-            System.out.println("Prepared create statement: " + pstmt.toString());
-            System.out.println("<---------------------------------------->");
+            //System.out.println("<---------------------------------------->");
+            //System.out.println("Prepared create statement: " + pstmt.toString());
+            //System.out.println("<---------------------------------------->");
 
             pstmt.executeUpdate();
         }catch(SQLException | IllegalAccessException e){
@@ -76,17 +75,16 @@ public class DbDao {
 
     /**
      * creates some user specified data in db
-     * @param model the model of the class being created
      * @param object the data being persisted
      */
-    public void createNoId(Metamodel<?> model, Object object){
-        RequestGenerator generator = new RequestGenerator(model, object, "CreateNoId");
+    public void createNoId(Object object){
+        RequestGenerator generator = new RequestGenerator(object, "CreateNoId");
         ArrayList<Field> objectFields = getObjectFields(object);
 
-        System.out.println("Create Request: " + generator.getRequest());
+        //System.out.println("Create Request: " + generator.getRequest());
 
         try {
-            if (conn.isClosed() == true) {
+            if (conn.isClosed()) {
                 conn = ConnectionFactory.getConnection();
             }
         } catch (Exception e) {
@@ -98,25 +96,25 @@ public class DbDao {
             //THERE NEEDS TO BE SOME CHANGING ON THE VALUES GATHERED TO BETTER REPRESENT THEM IN SQL
             for(int i = 1; i < objectFields.size(); i++){
                 Object fieldValue = objectFields.get(i).get(object);
-                System.out.print("Inserting field name: " + objectFields.get(i).getName());
-                System.out.print(" inserting field type: " + objectFields.get(i).getType());
-                System.out.print("Inserting field value: " + fieldValue.toString());
-                System.out.println("");
+                //System.out.print("Inserting field name: " + objectFields.get(i).getName());
+                //System.out.print(" inserting field type: " + objectFields.get(i).getType());
+                //System.out.print("Inserting field value: " + fieldValue.toString());
+                //System.out.println("");
 
                 String fieldClassType = objectFields.get(i).getType().getTypeName();
-                System.out.println("Field class type in create statement: " + fieldClassType);
+                //System.out.println("Field class type in create statement: " + fieldClassType);
 
                 if (fieldClassType.equals("int")) {
-                    System.out.println("Found integer type during insertion - making cast");
+                    //System.out.println("Found integer type during insertion - making cast");
                     pstmt.setObject(i, fieldValue, Types.INTEGER);
                 } else {
                     pstmt.setObject(i, fieldValue);
                 }
 
             }
-            System.out.println("<---------------------------------------->");
-            System.out.println("Prepared create statement: " + pstmt.toString());
-            System.out.println("<---------------------------------------->");
+            //System.out.println("<---------------------------------------->");
+            //System.out.println("Prepared create statement: " + pstmt.toString());
+            //System.out.println("<---------------------------------------->");
 
             pstmt.executeUpdate();
         }catch(SQLException | IllegalAccessException e){
@@ -126,12 +124,11 @@ public class DbDao {
 
     /**
      * Updates some data into a database
-     * @param model the model of the class being created
      * @param newObject the data being updated
      * @param oldObject the data being overwritten
      */
-    public void update(Metamodel<?> model, Object newObject, Object oldObject){
-        RequestGenerator generator = new RequestGenerator(model, oldObject, "Update");
+    public void update(Object newObject, Object oldObject){
+        RequestGenerator generator = new RequestGenerator(oldObject, "Update");
         ArrayList<Field> oldObjectFields = getObjectFields(oldObject);
         ArrayList<Field> newObjectFields = getObjectFields(newObject);
 
@@ -139,16 +136,16 @@ public class DbDao {
             PreparedStatement pstmt = conn.prepareStatement(generator.getRequest());
             for(int i = 0; i < oldObjectFields.size(); i++){
                 Object oldFieldValue = oldObjectFields.get(i).get(oldObject);
-                System.out.print(" Replacing field name: " + oldObjectFields.get(i).getName());
-                System.out.print(" Replacing field type: " + oldObjectFields.get(i).getType());
-                System.out.print(" Replacing field value: " + oldFieldValue.toString());
-                System.out.println("");
+                //System.out.print(" Replacing field name: " + oldObjectFields.get(i).getName());
+                //System.out.print(" Replacing field type: " + oldObjectFields.get(i).getType());
+                //System.out.print(" Replacing field value: " + oldFieldValue.toString());
+                //System.out.println("");
 
                 String oldFieldType = oldObjectFields.get(i).getType().getTypeName();
-                System.out.println("Old field class type in create statement: " + oldFieldType);
+                //System.out.println("Old field class type in create statement: " + oldFieldType);
 
                 if (oldFieldType.equals("int")) {
-                    System.out.println("Found integer type in old object during update - making cast");
+                    //System.out.println("Found integer type in old object during update - making cast");
                     pstmt.setObject(i + 1, oldFieldValue, Types.INTEGER);
                 } else {
                     pstmt.setObject(i + 1, oldFieldValue);
@@ -156,24 +153,24 @@ public class DbDao {
             }
             for (int i = 0; i < newObjectFields.size(); i++) {
                 Object newFieldValue = newObjectFields.get(i).get(newObject);
-                System.out.print(" Name to be set in update: " + newObjectFields.get(i).getName());
-                System.out.print(" Field type to be set in updatee: " + newObjectFields.get(i).getType());
-                System.out.print(" Field value to be set in update: " + newFieldValue.toString());
-                System.out.println("");
+                //System.out.print(" Name to be set in update: " + newObjectFields.get(i).getName());
+                //System.out.print(" Field type to be set in updatee: " + newObjectFields.get(i).getType());
+                //System.out.print(" Field value to be set in update: " + newFieldValue.toString());
+                //System.out.println("");
 
                 String newFieldType = newObjectFields.get(i).getType().getTypeName();
-                System.out.println("New field class type in create statement: " + newFieldType);
+                //System.out.println("New field class type in create statement: " + newFieldType);
 
                 if (newFieldType.equals("int")) {
-                    System.out.println("Found integer type in new object during update - making cast");
+                    //System.out.println("Found integer type in new object during update - making cast");
                     pstmt.setObject(i + 5, newFieldValue, Types.INTEGER);
                 } else {
                     pstmt.setObject(i + 5, newFieldValue);
                 }
             }
-            System.out.println("<---------------------------------------->");
-            System.out.println("Prepared update statement: " + pstmt.toString());
-            System.out.println("<---------------------------------------->");
+            //System.out.println("<---------------------------------------->");
+            //System.out.println("Prepared update statement: " + pstmt.toString());
+            //System.out.println("<---------------------------------------->");
 
             pstmt.executeUpdate();
 
@@ -184,11 +181,10 @@ public class DbDao {
 
     /**
      * Deletes some user specified data into a database
-     * @param model the model of the class being deleted
      * @param object the data being deleted
      */
-    public void delete(Metamodel<?> model, Object object){
-        RequestGenerator generator = new RequestGenerator(model, object, "Delete");
+    public void delete(Object object){
+        RequestGenerator generator = new RequestGenerator(object, "Delete");
         ArrayList<Field> objectFields = getObjectFields(object);
         try{
             PreparedStatement pstmt = conn.prepareStatement(generator.getRequest());
@@ -197,19 +193,19 @@ public class DbDao {
 
                 Object fieldValue = objectFields.get(i).get(object);
                 String fieldClassType = objectFields.get(i).getType().getTypeName();
-                System.out.println("Field class type in delete statement: " + fieldClassType);
+                //System.out.println("Field class type in delete statement: " + fieldClassType);
 
                 if (fieldClassType.equals("int")) {
-                    System.out.println("Found integer type during deletion - making cast");
+                    //System.out.println("Found integer type during deletion - making cast");
                     pstmt.setObject(i + 1, fieldValue, Types.INTEGER);
                 } else {
                     pstmt.setObject(i + 1, fieldValue);
                 }
             }
 
-            System.out.println("<---------------------------------------->");
-            System.out.println("Prepared delete statement: " + pstmt.toString());
-            System.out.println("<---------------------------------------->");
+            //System.out.println("<---------------------------------------->");
+            //System.out.println("Prepared delete statement: " + pstmt.toString());
+            //System.out.println("<---------------------------------------->");
 
             pstmt.executeUpdate();
 
@@ -223,14 +219,14 @@ public class DbDao {
      * @param model the model of the class being read
      */
     public List<?> read(Metamodel<?> model, Object object){
-        RequestGenerator generator = new RequestGenerator(model, object, "ReadAll");
+        RequestGenerator generator = new RequestGenerator(object, "ReadAll");
         List<Object> listOfObjects = new LinkedList<>();
-        System.out.println("Read Request " + generator.getRequest());
+        //System.out.println("Read Request " + generator.getRequest());
         try{
             PreparedStatement pstmt = conn.prepareStatement(generator.getRequest());
             ResultSet rs = pstmt.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
-            //System.out.println(rs.toString());
+            ////System.out.println(rs.toString());
             listOfObjects = mapResultSet(rs, rsmd, object, model);
         }catch(SQLException e){
             e.printStackTrace();
@@ -246,8 +242,8 @@ public class DbDao {
      * @param columnNames the list of column names specified by the user
      */
     public List<?> findByField(Metamodel<?> model, Object object, ArrayList<String> columnNames){
-        System.out.println("[INFO] - DbDao.findByField - columns being searched:  " + columnNames.toString());
-        RequestGenerator generator = new RequestGenerator(model, object, columnNames, "FindByField");
+        //System.out.println("[INFO] - DbDao.findByField - columns being searched:  " + columnNames.toString());
+        RequestGenerator generator = new RequestGenerator(object, columnNames, "FindByField");
         List<Object> listOfObjects = new LinkedList<>();
         Map<String, String> columnMap = ModelScraper.getColumnMap(object.getClass().getSimpleName());
 
@@ -266,7 +262,7 @@ public class DbDao {
                         if (columnNames.get(i).equals(field.getName().substring(field.getName().lastIndexOf('.') + 1).trim())) {
                             // a replacement target for pstmt
                             if (field.getType().equals("int")) {
-                                System.out.println("Found integer in search field ");
+                                //System.out.println("Found integer in search field ");
                                 pstmt.setObject(i + 1, field.get(object), Types.INTEGER);
                             } else {
                                 pstmt.setObject(i + 1, field.get(object));
@@ -278,7 +274,7 @@ public class DbDao {
                 }
             }
 
-            System.out.println("prepared statmeent: " + pstmt);
+            //System.out.println("prepared statmeent: " + pstmt);
             ResultSet rs = pstmt.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
             listOfObjects = mapResultSet(rs, rsmd, object, model);
@@ -298,7 +294,7 @@ public class DbDao {
      * @param columnNames the list of column names specified by the user
      */
     public List<?> read(Metamodel<?> model, Object object, ArrayList<String> columnNames){
-        RequestGenerator generator = new RequestGenerator(model, object, columnNames, "ReadCols");
+        RequestGenerator generator = new RequestGenerator(object, columnNames, "ReadCols");
         List<Object> listOfObjects = new LinkedList<>();
         try{
             PreparedStatement pstmt = conn.prepareStatement(generator.getRequest());
@@ -314,21 +310,25 @@ public class DbDao {
     public ArrayList<Field> getObjectFields(Object userObj){
         ArrayList<Field> objectValues = new ArrayList<>();
         Field[] fields = userObj.getClass().getDeclaredFields();
-        //TODO get validmapped columns here to make sure the field should be included
         Map<String, String> columnMap = ModelScraper.getColumnMap(userObj.getClass().getSimpleName());
-        System.out.println("Column Map in getFields call of dbdao: " + columnMap.toString());
-        for(Field field : fields){
-            if (columnMap.containsKey(field.getName())) {
-                field.setAccessible(true);
-                try {
-                    objectValues.add(field);
-                } catch (Exception e) {
-                    //logger.debug("error getting obj values" + e.getMessage());
-                    e.printStackTrace();
+        //System.out.println("Column Map in getFields call of dbdao: " + columnMap.toString());
+        try {
+            for(Field field : fields){
+                if (columnMap.containsKey(field.getName())) {
+                    field.setAccessible(true);
+                    try {
+                        objectValues.add(field);
+                    } catch (Exception e) {
+                        //logger.debug("error getting obj values" + e.getMessage());
+                        e.printStackTrace();
+                    }
                 }
             }
+            return objectValues;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return objectValues;
+        return null;
     }
 
     /**
@@ -339,47 +339,45 @@ public class DbDao {
      * @return the list of objects returned from the database
      */
     private List<Object> mapResultSet(ResultSet rs, ResultSetMetaData metaData, Object object, Metamodel<?> model){
-        //System.out.println("<------------------QUERY RESULTS---------------------->");
+        ////System.out.println("<------------------QUERY RESULTS---------------------->");
         List<Object> returnObjects = new LinkedList<>();
         try {
             List<String> resultColumns = new LinkedList<>();
             for(int i = 0; i < metaData.getColumnCount(); i++){
                 resultColumns.add(metaData.getColumnName(i+1));
             }
-            //System.out.println("Result columns: " + resultColumns.toString());
+            ////System.out.println("Result columns: " + resultColumns.toString());
             while(rs.next()){
-                //System.out.println("<------------------NEXT RESULT---------------------->");
+                ////System.out.println("<------------------NEXT RESULT---------------------->");
 
                 Object returnObject = object.getClass().getConstructor().newInstance();
                 for(String resultColumn : resultColumns){
-                    System.out.println("<---------------------------------------->");
-                    System.out.println("MAPPING RESULT (column): " + resultColumn);
-                    System.out.println("<---------------------------------------->");
+                    //System.out.println("<---------------------------------------->");
+                    //System.out.println("MAPPING RESULT (column): " + resultColumn);
+                    //System.out.println("<---------------------------------------->");
 
                     String colName = model.findFieldNameOfColumn(resultColumn);
-                    System.out.println("Column Name: " + colName);
+                    //System.out.println("Column Name: " + colName);
 
                     Class<?> type = model.findColumnType(resultColumn);
-                    System.out.println("Col Type: " + type.getSimpleName());
+                    //System.out.println("Col Type: " + type.getSimpleName());
 
                     Object objectValue = rs.getObject(resultColumn);
-                    System.out.println("Result value: " + objectValue.toString());
+                    //System.out.println("Result value: " + objectValue.toString());
 //                      getting a field name from a result sql col
                     //Map<String, String> colMap = ModelScraper.getColumnMap();
 
                     String setMethod = colName.substring(0,1).toUpperCase() + colName.substring(1);
-                    System.out.println("method name: " + setMethod);
+                    //System.out.println("method name: " + setMethod);
 
                     Method method = object.getClass().getMethod("set" + setMethod, type);
-                    System.out.println("Method: " + method.toString());
+                    //System.out.println("Method: " + method.toString());
 
-
-                    //todo HERES THE ISSUE!!!!
-                    //System.out.println("Object value: " + objectValue.toString() + " + object type " + objectValue.getClass().getTypeName());
+                    ////System.out.println("Object value: " + objectValue.toString() + " + object type " + objectValue.getClass().getTypeName());
 
 
 
-//                    System.out.println("Method type: " + type.getTypeName());
+//                    //System.out.println("Method type: " + type.getTypeName());
                     method.invoke(returnObject, objectValue);
                 }
                 returnObjects.add(returnObject);

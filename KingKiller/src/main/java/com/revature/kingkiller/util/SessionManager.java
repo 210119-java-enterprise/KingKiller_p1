@@ -1,7 +1,13 @@
 package com.revature.kingkiller.util;
 
+import java.sql.Connection;
 import java.util.*;
 
+/**
+ *  The lesser overlord object used in our mapper that is in charge of handing out sessions and overseeing
+ *  the connection pool while doing so. This class allows us to create multiple sessions off of one session pool
+ *  so that we don't have to keep establishing connections to the databse over and over.
+ */
 public class SessionManager {
 
     private List<Metamodel<Class<?>>> modelList;
@@ -27,6 +33,21 @@ public class SessionManager {
             e.printStackTrace();
         }
         return session;
+    }
+
+    /**
+     * Gets a new database session
+     * @return a new unique database session
+     */
+    public Connection getConnection() {
+        Connection newConn;
+        try {
+            newConn = connFactory.getConnection();
+            return newConn;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

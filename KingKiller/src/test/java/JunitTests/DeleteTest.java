@@ -2,7 +2,7 @@ package JunitTests;
 
 import com.revature.kingkiller.Mapper;
 import com.revature.kingkiller.crudao.DbDao;
-import com.revature.kingkiller.models.Employee;
+import models.Employee;
 import com.revature.kingkiller.util.Metamodel;
 import com.revature.kingkiller.util.Session;
 import com.revature.kingkiller.util.SessionManager;

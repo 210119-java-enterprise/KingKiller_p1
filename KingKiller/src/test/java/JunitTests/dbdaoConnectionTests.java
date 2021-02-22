@@ -2,17 +2,17 @@ package JunitTests;
 
 import com.revature.kingkiller.Mapper;
 import com.revature.kingkiller.crudao.DbDao;
-import com.revature.kingkiller.models.Employee;
-import com.revature.kingkiller.scapers.ConfigScraper;
-import com.revature.kingkiller.util.ConfigData;
+import models.Employee;
 import com.revature.kingkiller.util.Metamodel;
 import com.revature.kingkiller.util.Session;
 import com.revature.kingkiller.util.SessionManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,6 +23,7 @@ public class dbdaoConnectionTests {
     private Mapper mapper;
     private SessionManager sessionManager;
     private Session dbSession;
+    private Employee eric;
 
 
     @BeforeEach
@@ -32,7 +33,7 @@ public class dbdaoConnectionTests {
         sessionManager = mapper.getSessionManager();
         dbSession = sessionManager.getSession();
         mapper.Map(Employee.class); //think this sets metamodel?
-        Employee eric = new Employee();
+        this.eric = new Employee();
         eric.setFirstName("test");
         eric.setId(96);
         eric.setLastName("one");
@@ -52,6 +53,21 @@ public class dbdaoConnectionTests {
                     "Session managers new sessions connection is not open");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+
+    }
+
+    @AfterEach
+    public void tearDown() {
+        dbSession.delete(eric);
+        //just double check to see that it was actually removed by listing results
+        List<Employee> queryRead = (List<Employee>) dbSession.readAll(eric);
+        System.out.println("<-----------------LISTING READ QUERY RESULTS--------------------->");
+        for (Employee employee : queryRead) {
+            System.out.println("<-----" + employee.getFirstName() + "------->");
+            System.out.println("lastname: " + employee.getLastName());
+            System.out.println("id: " + employee.getId());
+            System.out.println("salary: " + employee.getSalary());
         }
 
     }

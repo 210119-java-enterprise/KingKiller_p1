@@ -9,11 +9,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionFactory {
-    private final Logger logger = LogManager.getLogger(Session.class);
-
     private static BasicDataSource bds = new BasicDataSource();
-
-    private Properties props = new Properties();
 
     static {
         try {
@@ -22,6 +18,9 @@ public class ConnectionFactory {
             e.printStackTrace();
         }
     }
+
+    private final Logger logger = LogManager.getLogger(Session.class);
+    private Properties props = new Properties();
 
     //STARTS a connection to the database
     public ConnectionFactory(ConfigData configData) {

@@ -5,6 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Generic version of a class that we can reference for fields and type information while mapping to db
+ * @param <T>
+ */
 public class Metamodel<T> {
 
     private Class<T> clazz;

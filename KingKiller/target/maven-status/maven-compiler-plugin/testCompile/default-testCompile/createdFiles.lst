@@ -1,4 +1,9 @@
-DomParserDemo.class
-JunitTests\dbdaoConnectionTests.class
-JunitTests\ConfigScraperTest.class
+JunitTests\UpdateTest.class
+models\Employee.class
 TestDriver.class
+DomParserDemo.class
+JunitTests\ReadTest.class
+JunitTests\dbdaoConnectionTests.class
+JunitTests\DeleteTest.class
+JunitTests\ConfigScraperTest.class
+JunitTests\CreateTest.class

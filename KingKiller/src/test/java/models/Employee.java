@@ -1,4 +1,4 @@
-package com.revature.kingkiller.models;
+package models;
 public class Employee {
     private int id;
     private String firstName;
