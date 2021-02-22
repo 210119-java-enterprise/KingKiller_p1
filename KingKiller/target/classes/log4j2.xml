@@ -29,7 +29,7 @@
             <AppenderRef ref="stdout"/>
         </Root>
 
-        <Logger name="com.revature" level="ALL">
+        <Logger name="com.kingkiller" level="ALL">
             <AppenderRef ref="error_fileout" level="ERROR"/>
             <AppenderRef ref="info_fileout" level="INFO"/>
             <AppenderRef ref="trace_fileout" level="TRACE"/>

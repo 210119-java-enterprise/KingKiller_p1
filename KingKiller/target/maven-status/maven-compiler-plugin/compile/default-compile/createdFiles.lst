@@ -1,0 +1,14 @@
+com\revature\kingkiller\util\SessionManager.class
+com\revature\kingkiller\Mapper.class
+com\revature\kingkiller\crudao\DbDao.class
+com\revature\kingkiller\util\Session.class
+com\revature\kingkiller\models\Employee.class
+com\revature\kingkiller\scapers\ClassInspector.class
+com\revature\kingkiller\scapers\ModelScraper.class
+com\revature\kingkiller\scapers\ConfigScraper.class
+com\revature\kingkiller\util\Metamodel.class
+com\revature\kingkiller\query\RequestGenerator.class
+com\revature\kingkiller\util\ConnectionFactory.class
+com\revature\kingkiller\util\ColumnField.class
+com\revature\kingkiller\service\DbQueryService.class
+com\revature\kingkiller\util\ConfigData.class
