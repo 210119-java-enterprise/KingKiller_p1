@@ -30,7 +30,7 @@ List<Employee> queryRead =
 List<Employee> queryRead = 
 (List<Employee>) dbSession.findByField(eric, firstName); // ----> this finds all entries in the mapped table matching the passed objects params    
 
-dbSession.update(newman, eric); ----> this updates a target entry (eric in this case) with a source entry in the mapped class table
+dbSession.update(newman, eric); // ----> this updates a target entry (eric in this case) with a source entry in the mapped class table
     
 dbSession.delete(newman); // ----> this deletes a table entry matching the fields in the eric object from the mapped employee class table
     
