@@ -81,3 +81,25 @@ dbSession.delete(newman); // ----> this deletes a table entry matching the field
     <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
+
+
+Goals Achieved: 
+- Connection pooling to increase speed of application after loadup - ie hand out an already active connection each time new session created
+- Can handle int, double, string etc. Can handle BigDecimal that comes from big doubles from the sql database. 
+- Create works
+- Read works in a variety of ways - can read specific entries, specific columns and whole tables
+- Update is pretty simple but allows us to replace a record in the database with an object by specifying the target record through an object with matching fields
+    -   IE you instantiate an object to the field values your targetting, then you instanciate a copy and change whatever field you want edited in the db and call update
+- Delete works
+- Uses XML to map objects to the correct tables in the databse and to provide the correct column names in reference to the object field names
+- Uses XML to map db configuration object
+- JUNIT testing was pretty basic but successful and REALLY helpful
+- Integrated into the bank app create and read by fields. The create is used to create accounts and users and the read by field is used for login verification and account retrieval. 
+- Javadocs generated and useful for understanding application
+
+WishList:
+- Implementation to handle annotation based mapping based on user preference
+- Table joins and creation
+- Major refactor of scraper, dbdao/dbservice, and request generator as well as a review of the mapper/sessionmanager relationship
+- Log4J implemented
+- General restructuring of some of the types passed around (go from List to ArrayList bit too much) and also fully fleshed out columnfield, primarykey etc objects.
