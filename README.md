@@ -89,7 +89,7 @@ Goals Achieved:
 - Create works
 - Read works in a variety of ways - can read specific entries, specific columns and whole tables
 - Update is pretty simple but allows us to replace a record in the database with an object by specifying the target record through an object with matching fields
-    -   IE you instantiate an object to the field values your targetting, then you instanciate a copy and change whatever field you want edited in the db and call update
+    -   IE you instantiate an object to the field values your targetting, then you instantiate a copy and change whatever field you want edited in the db and call update
 - Delete works
 - Uses XML to map objects to the correct tables in the databse and to provide the correct column names in reference to the object field names
 - Uses XML to map db configuration object
